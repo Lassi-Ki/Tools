@@ -2,13 +2,13 @@ import argparse
 import os
 import datasets
 from torch.utils.data import DataLoader
-from visualize import utils
+import utils
 from architecture import *
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Spectral Recovery Toolbox")
-    parser.add_argument('--method', type=str, default='fcl')
+    parser.add_argument('--method', type=str, default='gdlnet')
     parser.add_argument('--pretrained_model_path', type=str,
                         default=r'D:\Codes\Tools\models\FCL_v3_0438.pth')
     parser.add_argument("--gpu_id", type=str, default='0')

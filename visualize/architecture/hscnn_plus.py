@@ -1,6 +1,5 @@
 import torch.nn as nn
 import torch
-from torchsummary import summary
 
 
 class dfus_block(nn.Module):
@@ -84,4 +83,3 @@ if __name__ == "__main__":
     model = HSCNN_Plus()
     x = torch.rand(2, 3, 128, 128)
     model(x)
-    summary(model, x)

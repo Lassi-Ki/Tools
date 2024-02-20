@@ -5,7 +5,6 @@ from einops import rearrange
 import math
 import warnings
 from torch.nn.init import _calculate_fan_in_and_fan_out
-from torchsummary import summary
 
 
 def _no_grad_trunc_normal_(tensor, mean, std, a, b):
@@ -305,4 +304,3 @@ if __name__ == '__main__':
     input = torch.randn(2, 3, 512, 512)
     output = model(input)
     print(output.shape)
-    # summary(model, input)

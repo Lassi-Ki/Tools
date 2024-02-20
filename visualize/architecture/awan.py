@@ -1,7 +1,6 @@
 import torch
 from torch import nn
 from torch.nn import functional as F
-from torchsummary import summary
 
 
 class AWCA(nn.Module):
@@ -233,4 +232,3 @@ if __name__ == '__main__':
     x = torch.randn(2, 3, 128, 128)
     y = model(x)
     print(y.shape)
-    summary(model, x)

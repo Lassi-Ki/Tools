@@ -3,6 +3,7 @@ import torch.nn as nn
 import numpy as np
 import os
 import hdf5storage as hdf5
+import cv2
 
 
 class AverageMeter(object):
@@ -90,5 +91,10 @@ def validate(val_loader, model, mrae, rmse, psnr, sample_folder, is_save=False):
             save_img_name = str(i) + '.mat'
             save_img_path = os.path.join(sample_folder, save_img_name)
             hdf5.write(data=output, path='cube', filename=save_img_path, matlab_compatible=True)
+
+            target = target.clone().data.permute(0, 2, 3, 1).cpu().numpy()[0, :, :, :].astype(np.float64)
+            save_target_name = str(i) + '_target.mat'
+            save_target_path = os.path.join(sample_folder, save_target_name)
+            hdf5.write(data=target, path='cube', filename=save_target_path, matlab_compatible=True)
 
     return losses_mrae.avg, losses_rmse.avg, losses_psnr.avg

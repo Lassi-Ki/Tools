@@ -1,4 +1,3 @@
-from torchsummary import summary
 import torch
 import torch.nn as nn
 from torch.fft import fft, ifft
@@ -220,4 +219,3 @@ if __name__ == "__main__":
     model = Network()
     x = torch.rand(2, 3, 128, 128)
     model(x)
-    # summary(model, x)

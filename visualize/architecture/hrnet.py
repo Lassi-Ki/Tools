@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import Parameter
-from torchsummary import summary
 
 
 # ----------------------------------------
@@ -490,4 +489,3 @@ if __name__ == '__main__':
     model = SGN()
     x = torch.rand(2, 3, 128, 128)
     model(x)
-    summary(model, x)
