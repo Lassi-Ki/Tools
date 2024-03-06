@@ -5,14 +5,15 @@ import h5py
 
 
 class NTIRE2022Dataset(Dataset):
-    def __init__(self, data_root, patch_size, bgr2rgb=True):
+    def __init__(self, opt, bgr2rgb=True):
         self.hypers = []
         self.bgrs = []
-        self.out_rgbs = []
-        self.patch_size = patch_size
-        hyper_data_path = data_root + 'Valid_spectral'
-        bgr_data_path = data_root + 'Valid_RGB'
-        valid_list_path = data_root + 'split_txt/valid_list.txt'
+        self.crop_size = opt.patch_size
+        self.stride = opt.stride
+
+        hyper_data_path = opt.dataset_path + 'Valid_spectral'
+        bgr_data_path = opt.dataset_path + 'Valid_RGB'
+        valid_list_path = opt.dataset_path + 'split_txt/valid_list.txt'
 
         with open(valid_list_path, 'r') as fin:
             hyper_list = [line.replace('\n', '.mat') for line in fin]
@@ -20,9 +21,8 @@ class NTIRE2022Dataset(Dataset):
         hyper_list.sort()
         bgr_list.sort()
 
-        h, w = 482, 512
-        self.patch_per_line = (w - patch_size) // 8 + 1
-        self.patch_per_col = (h - patch_size) // 8 + 1
+        self.patch_per_line = 4
+        self.patch_per_col = 3
         self.patch_per_img = self.patch_per_line * self.patch_per_col
 
         for i in range(len(hyper_list)):
@@ -36,7 +36,6 @@ class NTIRE2022Dataset(Dataset):
             bgr_path = bgr_data_path + bgr_list[i]
             assert hyper_list[i].split('.')[0] == bgr_list[i].split('.')[0], 'Hyper and RGB come from different scenes.'
             bgr = cv2.imread(bgr_path)
-            self.out_rgbs.append(bgr)
             if bgr2rgb:
                 bgr = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
             bgr = np.float32(bgr)
@@ -47,24 +46,26 @@ class NTIRE2022Dataset(Dataset):
             self.bgrs.append(bgr)
             mat.close()
 
-        print(self.out_rgbs)
+        self.img_num = len(self.hypers)
+        self.length = self.patch_per_img * self.img_num
 
     def __getitem__(self, idx):
-        # TODO: 输出当前测试的 rgb 图片
-        out_rgb = self.out_rgbs[idx]
+        stride = self.stride
+        crop_size = self.crop_size
 
-        stride = 8
-        crop_size = self.patch_size
-        img_idx, patch_idx = idx // self.patch_per_img, idx % self.patch_per_img
-        h_idx, w_idx = patch_idx // self.patch_per_line, patch_idx % self.patch_per_line
-        bgr = self.bgrs[img_idx][:, h_idx * stride:h_idx * stride + crop_size, w_idx * stride:w_idx * stride + crop_size]
-        hyper = self.hypers[img_idx][:, h_idx * stride:h_idx * stride + crop_size, w_idx * stride:w_idx * stride + crop_size]
-        out_rgb = out_rgb[:, h_idx * stride:h_idx * stride + crop_size, w_idx * stride:w_idx * stride + crop_size]
+        img_idx = idx // self.patch_per_img
+        patch_idx = idx % self.patch_per_img
 
-        # out_rgb_path = f'./output/rgb/{img_idx}_{patch_idx}.jpg'
-        # cv2.imwrite(out_rgb_path, out_rgb)
+        bgr = self.bgrs[img_idx]
+        hyper = self.hypers[img_idx]
+
+        h = patch_idx // self.patch_per_line
+        w = patch_idx % self.patch_per_line
+
+        bgr = bgr[:, h * stride: h * stride + crop_size, w * stride: w * stride + crop_size]
+        hyper = hyper[:, h * stride: h * stride + crop_size, w * stride: w * stride + crop_size]
 
         return np.ascontiguousarray(bgr), np.ascontiguousarray(hyper)
 
     def __len__(self):
-        return len(self.hypers)
+        return self.length

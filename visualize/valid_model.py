@@ -17,6 +17,7 @@ if __name__ == "__main__":
     parser.add_argument("--dataset_mode", type=str, default="NTIRE2022")
     parser.add_argument("--dataset_path", type=str, default=r"")
     parser.add_argument("--patch_size", type=int, default=128)
+    parser.add_argument("--stride", type=int, default=128)
     opt = parser.parse_args()
 
     os.environ["CUDA_DEVICE_ORDER"] = 'PCI_BUS_ID'
@@ -39,7 +40,7 @@ if __name__ == "__main__":
         psnr = psnr.cuda()
 
     if opt.dataset_mode == "NTIRE2022":
-        val_data = datasets.NTIRE2022Dataset(opt.dataset_path, opt.patch_size)
+        val_data = datasets.NTIRE2022Dataset(opt)
     elif opt.dataset_mode == "CAVE":
         pass
         # val_data = datasets.CAVE(opt.dataset_path, opt.patch_size)
