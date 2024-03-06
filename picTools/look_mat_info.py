@@ -37,7 +37,7 @@ def view_mat_info_by_h5py(mat_file):
 
 if __name__ == '__main__':
     # mat_file = r'D:\Datasets\CAVE\Train_spectral\balloons_ms.mat'
-    mat_file = r'D:\Datasets\hypers_0914\crop_hyper_0.mat'
+    mat_file = r'D:\Codes\Tools\output\gdlnet\crop_bgr_0.mat'
     # mat_file = './datas/fake_and_real_peppers_ms.mat'
     # view_mat_info_by_scipy(mat_file)
     view_mat_info_by_h5py(mat_file)

@@ -11,7 +11,7 @@ def split_images(mat_path, out_img_path):
         os.makedirs(split_path)
     for filename in os.listdir(mat_path):
         spectral = hdf5.loadmat(os.path.join(mat_path, filename))   # 31 channels (31, 128, 128)
-        spectral = (spectral['cube'] * 255).astype(np.uint8)
+        spectral = (spectral['cube'] * 255).astype(np.uint8).transpose(2, 0, 1)
         subfile_path = os.path.join(split_path, f"patch_{filename.replace('.mat', '')}")
         if not os.path.exists(subfile_path):
             os.makedirs(subfile_path)
@@ -24,6 +24,6 @@ def split_images(mat_path, out_img_path):
 
 
 if __name__ == '__main__':
-    mat_path = r'D:\Datasets\hypers_0914'
-    out_img_path = r'D:\Datasets'
+    mat_path = r'D:\Codes\Tools\output\mst_plus_plus'
+    out_img_path = r'D:\Codes\Tools\output'
     split_images(mat_path, out_img_path)
