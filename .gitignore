@@ -2,6 +2,6 @@
 
 /models/*
 
-/outputs/*
+/output/*
 
 /visualize/architecture/__pycache__/*
