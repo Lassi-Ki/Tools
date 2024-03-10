@@ -9,13 +9,13 @@ from architecture import model_generator
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", type=str, default="gdlnet")
+    parser.add_argument("--model", type=str, default="mst_plus_plus")
     parser.add_argument("--pretrained_model_path", type=str,
-                        default=r"D:\Codes\Tools\models\GDL.pth")
+                        default=r"D:\codes\Tools\models\mst++.pth")
     parser.add_argument("--gpu_id", type=str, default='0')
-    parser.add_argument("--output_dir", type=str, default="D:\Codes\Tools\output\\")
+    parser.add_argument("--output_dir", type=str, default=r"D:\codes\Tools\output\mat_out")
     parser.add_argument("--input_dir", type=str,
-                        default=r"D:\Codes\Tools\datas\RGBs\\")
+                        default=r"D:\codes\Tools\datas\RGBs")
     opt = parser.parse_args()
 
     os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu_id
@@ -43,7 +43,7 @@ if __name__ == "__main__":
                 image_paths.append(file_path)
     sorted(image_paths)
     for imge_path in image_paths:
-        print("imge_path: ", imge_path)
+        # print("imge_path: ", imge_path)
         bgr = cv2.imread(imge_path)
         rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
         rgb = np.float32(rgb)
